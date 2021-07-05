@@ -45,6 +45,7 @@ def upperTankLevel(value: str):
 @app.get("/lowerTankLevel/{value}")
 def lowerTankLevel(value: str):
     if(int(getSavedText('upperTankVal')[0]) < 100):
+        saveText(value, "lowerTankVal")
         return "Filling Upper Mode Pulley"
     else:
         saveText(value, "lowerTankVal")
@@ -54,7 +55,21 @@ def lowerTankLevel(value: str):
 @app.get("/pump/{value}")
 def waterAvail(value: str):
     saveText(value, 'pump')
+    upper = True
+    lower = True
+
     if((int(getSavedText('upperTankVal')[0]) < 100) or (int(getSavedText('lowerTankVal')[0]) < 100)) and int(getSavedText('pump')[0]) == 1:
-        return "Turning Motor On"
+        print('here1')
+        if (time.time()-(float(getSavedText('upperTankVal')[1])) > 10.0):
+            # print(time.time()-(float(getSavedText('upperTankVal')[1])))
+            upper = False
+        if (time.time()-(float(getSavedText('lowerTankVal')[1])) > 10.0):
+            # print('here4')
+            lower = False
+        if(not upper) and (not lower):
+            return "Turning Motor Off"
+        else:
+            # print('here2')
+            return "Turning Motor On"
     else:
         return "Turning Motor Off"
