@@ -73,3 +73,17 @@ def waterAvail(value: str):
             return "Turning Motor On"
     else:
         return "Turning Motor Off"
+
+# lower,upper,pump
+
+
+@app.get("/getStats/{text}")
+def gettingWaterStatus(text: str):
+    if(text == "upper"):
+        val = getSavedText('upperTankVal')[0]
+    elif(text == "lower"):
+        val = getSavedText('lowerTankVal')[0]
+    elif(text == "pump"):
+        val = getSavedText('pump')[0]
+
+    return val
